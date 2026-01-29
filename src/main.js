@@ -235,7 +235,7 @@ GameScene.prototype.renderTutorialStep = function () {
   const firstBacterium = this.bacteria.getChildren().find(b => b && b.active);
 
   if (step === 0) {
-    this.tutorialTitle.setText("Phages vs Bacteria");
+    this.tutorialTitle.setText("Phagefall");
     this.tutorialBody.setText("You are a phage in a petri dish.\nClear enough bacteria before they multiply out of control.");
     pointAt(this.center.x, this.center.y);
 
