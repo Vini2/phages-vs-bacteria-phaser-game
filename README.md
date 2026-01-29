@@ -1,2 +1,2 @@
-# phages-vs-bacteria-phaser-game
-Phages vs bacteria Phaser game
+# Phages vs bacteria Phaser game
+This Phages vs bacteria game is developed using [Phaser](https://phaser.io/).
