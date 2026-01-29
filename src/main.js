@@ -1,4 +1,4 @@
-/* Phages vs Bacteria - Phaser 3 starter
+/* Phages vs Bacteria - Phaser 3 starter (Phagefall)
    - Procedural assets: no image files required
    - Tap/click bacteria to attach, inject timer fills, bacterium lyses, you replicate
    - Difficulty:
@@ -6,6 +6,10 @@
      * Spawn fewer helper phages
      * Most helpers only swarm/harass
      * A small fraction of helpers ("killer") can occasionally lyse (rare + long cooldown)
+   - NEW:
+     * Background music (browser-safe unlock + fade in/out)
+   IMPORTANT:
+     Put your music file at: assets/bg_music.mp3
 */
 
 const W = 960;
@@ -38,7 +42,9 @@ BootScene.prototype = Object.create(Phaser.Scene.prototype);
 BootScene.prototype.constructor = BootScene;
 
 BootScene.prototype.preload = function () {
-  // No external loads.
+  // Load background music (host this file in your repo)
+  // Path: /assets/bg_music.mp3
+  this.load.audio("bgm", "assets/bg_music.mp3");
 };
 
 BootScene.prototype.create = function () {
@@ -68,8 +74,12 @@ GameScene.prototype.create = function () {
   this.spawnChance2nd = 0.08;
 
   // A small fraction of helpers can lyse (keeps player as main actor)
-  this.killerHelperChance = 0.80;      // 90% of spawned helpers are "killer"
-  this.killerLysisChancePerSec = 0.3; // 30% probability while in range (per second)
+  this.killerHelperChance = 0.80;      // 80% of spawned helpers are "killer"
+  this.killerLysisChancePerSec = 0.3;  // 30% probability while in range (per second)
+
+  // Music
+  this.music = null;
+  this.musicTargetVolume = 0.35;
 
   // Groups
   this.bacteria = this.physics.add.group();
@@ -118,6 +128,24 @@ GameScene.prototype.create = function () {
     if (this.gameOver || this.tutorialActive) return;
     this.tryAttachAt(p.worldX, p.worldY);
   });
+
+  // --- MUSIC START (browser-safe) ---
+  // Many browsers block autoplay until user interacts.
+  // Phaser emits "unlocked" after a user gesture enables audio.
+  this.music = this.sound.add("bgm", { loop: true, volume: 0 });
+  this.sound.once("unlocked", () => {
+    if (!this.music || this.gameOver) return;
+    this.music.play({ volume: 0 });
+
+    // Fade in
+    this.tweens.add({
+      targets: this.music,
+      volume: this.musicTargetVolume,
+      duration: 2000,
+      ease: "Sine.easeOut"
+    });
+  });
+  // --- MUSIC END ---
 
   // Initial bacteria
   for (let i = 0; i < 10; i++) this.spawnBacterium();
@@ -550,6 +578,19 @@ GameScene.prototype.endGame = function (won) {
   this.gameOver = true;
   this.stopInjecting();
 
+  // Fade out music on game end
+  if (this.music && this.music.isPlaying) {
+    this.tweens.add({
+      targets: this.music,
+      volume: 0,
+      duration: 900,
+      ease: "Sine.easeInOut",
+      onComplete: () => {
+        if (this.music) this.music.stop();
+      }
+    });
+  }
+
   const banner = this.add.image(this.center.x, this.center.y, "panel").setAlpha(0.92);
   const title = won ? "YOU WIN" : "YOU LOSE";
   const subtitle = won
@@ -600,8 +641,6 @@ function bacteriaDrift(scene, b, dt) {
 }
 
 function helperBrain(scene, h, dt) {
-  // Helpers mostly swarm. A small subset ("killer") can occasionally lyse.
-
   let target = null;
   let bestD2 = 999999;
 
@@ -649,16 +688,14 @@ function helperBrain(scene, h, dt) {
     h.rotation = Phaser.Math.Angle.RotateTo(h.rotation, a, 3.5 * dt);
   }
 
-  // Killer behavior: rare lysis, only when very close, with long cooldown
+  // Killer behavior: occasional lysis, only when very close, with cooldown
   if (isKiller && target && cooldown <= 0 && bestD2 < 34 * 34) {
-    // convert per-second probability into per-frame
     const p = Phaser.Math.Clamp(scene.killerLysisChancePerSec * dt, 0, 1);
 
     if (Math.random() < p) {
       scene.lysis(target);
-      h.setData("cooldown", 1.5); // long cooldown so it doesn't dominate
+      h.setData("cooldown", 1.5);
 
-      // recoil away so it doesn't chain-kill
       const away = new Phaser.Math.Vector2(hx - target.x, hy - target.y).normalize().scale(220);
       h.body.setVelocity(away.x, away.y);
     }
