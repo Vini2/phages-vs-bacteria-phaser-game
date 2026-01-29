@@ -2,8 +2,9 @@
 
 **Phagefall** is a fast-paced biology-inspired arcade game built with [Phaser](https://phaser.io/). You control a bacteriophage inside a petri dish, infecting and lysing bacteria before they overrun the environment.
 
-> Attach → Inject → Lyse → Replicate
-> Survive the microbial arms race.
+> Attach → Inject → Lyse → Replicate. Survive the microbial arms race.
+
+Access the game at https://vini2.github.io/phagefall/
 
 ## 🎮 Gameplay
 
