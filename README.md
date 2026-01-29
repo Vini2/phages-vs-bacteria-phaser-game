@@ -68,3 +68,4 @@ Helper phages are capped for performance. Player must actively manage outbreaks.
 * Canvas rendering
 * Procedural graphics
 * No external assets
+* Music from [Pixabay Music](https://pixabay.com/music/)
