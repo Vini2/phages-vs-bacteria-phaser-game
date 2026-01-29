@@ -64,7 +64,7 @@ GameScene.prototype.create = function () {
   this.gameOver = false;
 
   // Helpers (fewer + weaker)
-  this.maxHelpers = 8;
+  this.maxHelpers = 6;
   this.spawnChance2nd = 0.08;
 
   // A small fraction of helpers can lyse (keeps player as main actor)
