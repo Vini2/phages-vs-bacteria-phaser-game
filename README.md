@@ -4,7 +4,8 @@
 
 > Attach → Inject → Lyse → Replicate. Survive the microbial arms race.
 
-Access the game at https://vini2.github.io/phagefall/
+🎮 **Play the game here:**  
+👉 https://vini2.github.io/phagefall/
 
 ## 🎮 Gameplay
 
