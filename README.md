@@ -1,6 +1,6 @@
 # <img src="favicon.svg" alt="Phagefall favicon" width="50"/> Phagefall
 
-**Phagefall** is a fast-paced biology-inspired arcade game built with [Phaser](https://phaser.io/). You control a bacteriophage inside a petri dish, infecting and lysing bacteria before they overrun the environment.
+**Phagefall** is a fast-paced biology-inspired arcade-style game built with [Phaser](https://phaser.io/) that runs on a web browser. You control a bacteriophage inside a petri dish, infecting and lysing bacteria before they overrun the environment.
 
 > Attach → Inject → Lyse → Replicate. Survive the microbial arms race.
 
