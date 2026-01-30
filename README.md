@@ -61,11 +61,10 @@ Helper phages are capped for performance. Player must actively manage outbreaks.
 | Restart | Click after game over    |
 
 
-## ⚙️ Tech Stack
+## ⚙️ Tech Stack and Resources
 
 * Phaser 3
 * JavaScript (ES6)
 * Canvas rendering
 * Procedural graphics
-* No external assets
 * Music from [Pixabay Music](https://pixabay.com/music/)
