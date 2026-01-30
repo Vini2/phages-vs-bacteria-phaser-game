@@ -74,8 +74,8 @@ GameScene.prototype.create = function () {
   this.spawnChance2nd = 0.08;
 
   // A small fraction of helpers can lyse (keeps player as main actor)
-  this.killerHelperChance = 0.80;      // 80% of spawned helpers are "killer"
-  this.killerLysisChancePerSec = 0.3;  // 30% probability while in range (per second)
+  this.killerHelperChance = 0.90;      // 90% of spawned helpers are "killer"
+  this.killerLysisChancePerSec = 0.35;  // 35% probability while in range (per second)
 
   // Music
   this.music = null;
@@ -177,7 +177,7 @@ GameScene.prototype.create = function () {
   this.attachedTarget = null;
   this.injecting = false;
   this.injectStartTime = 0;
-  this.baseInjectDuration = 950;
+  this.baseInjectDuration = 750;
   this.injectDuration = this.baseInjectDuration;
   this.attachRange = 92;
 
@@ -591,19 +591,24 @@ GameScene.prototype.endGame = function (won) {
     });
   }
 
+  // --- End UI container (so it's easy to destroy / manage) ---
+  this.endUI = this.add.container(0, 0).setDepth(3000);
+
   const banner = this.add.image(this.center.x, this.center.y, "panel").setAlpha(0.92);
+  this.endUI.add(banner);
+
   const title = won ? "YOU WIN" : "YOU LOSE";
   const subtitle = won
     ? "You cleared enough bacteria before they overran the dish."
     : "Bacteria overran the dish. Try attaching faster!";
 
-  this.add.text(this.center.x, this.center.y - 26, title, {
+  const titleText = this.add.text(this.center.x, this.center.y - 26, title, {
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
     fontSize: "40px",
     color: "#e8f3ff"
   }).setOrigin(0.5);
 
-  this.add.text(this.center.x, this.center.y + 14, subtitle, {
+  const subtitleText = this.add.text(this.center.x, this.center.y + 14, subtitle, {
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
     fontSize: "16px",
     color: "#b8d7ff",
@@ -611,17 +616,50 @@ GameScene.prototype.endGame = function (won) {
     wordWrap: { width: 640 }
   }).setOrigin(0.5);
 
-  this.add.text(this.center.x, this.center.y + 56, "Click/tap to restart", {
+  this.endUI.add([titleText, subtitleText]);
+
+  // --- NEW GAME BUTTON ---
+  const btnW = 220;
+  const btnH = 46;
+  const btnX = this.center.x;
+  const btnY = this.center.y + 74;
+
+  const btnBg = this.add.rectangle(btnX, btnY, btnW, btnH, 0x0e2a3d, 0.95)
+    .setStrokeStyle(2, 0x9cc6ff, 0.55)
+    .setInteractive({ useHandCursor: true });
+
+  const btnText = this.add.text(btnX, btnY, "New Game", {
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
-    fontSize: "14px",
-    color: "#9cc6ff"
+    fontSize: "16px",
+    color: "#e8f3ff"
   }).setOrigin(0.5);
 
-  banner.setScale(0.1);
-  this.tweens.add({ targets: banner, scale: 1, duration: 260, ease: "Back.easeOut" });
+  // Hover effects (desktop)
+  btnBg.on("pointerover", () => {
+    btnBg.setFillStyle(0x123a54, 1);
+    btnBg.setStrokeStyle(2, 0x9cc6ff, 0.85);
+  });
+  btnBg.on("pointerout", () => {
+    btnBg.setFillStyle(0x0e2a3d, 0.95);
+    btnBg.setStrokeStyle(2, 0x9cc6ff, 0.55);
+  });
 
-  this.input.once("pointerdown", () => this.scene.restart());
+  // Restart only when button is pressed
+  btnBg.on("pointerdown", () => {
+    if (this.endUI) this.endUI.destroy(true);
+    this.scene.restart();
+  });
+
+  this.endUI.add([btnBg, btnText]);
+
+  // Little pop-in animation (banner + button together)
+  this.endUI.setScale(0.1);
+  this.tweens.add({ targets: this.endUI, scale: 1, duration: 260, ease: "Back.easeOut" });
+
+  // IMPORTANT: remove the old "tap anywhere" restart
+  // (Do NOT keep: this.input.once("pointerdown", () => this.scene.restart());)
 };
+
 
 /* ---------------------------- Behaviors ---------------------------- */
 
