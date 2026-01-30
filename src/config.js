@@ -1,3 +1,21 @@
+/**
+ * @file src/config.js
+* @author Vijini Mallawaarachchi <viji.mallawaarachchi@gmail.com>
+ * @version 0.0.1
+ * @description
+ * Centralized configuration for game dimensions and tunable gameplay constants.
+ *
+ * Responsibilities:
+ * - Provide shared width/height used by textures and scenes
+ * - Provide GAME_SETTINGS for balancing difficulty and feel
+ *
+ * Editing guide:
+ * - baseInjectDuration: base injection time in ms
+ * - killerHelperChance / killerLysisChancePerSec: helper aggressiveness
+ * - neededToWin / loseThreshold: win/lose pacing
+ */
+
+
 export const W = 960;
 export const H = 540;
 

@@ -1,3 +1,22 @@
+/**
+ * @file src/systems/textures.js
+ * @author Vijini Mallawaarachchi <viji.mallawaarachchi@gmail.com>
+ * @version 0.0.1
+ * @description
+ * Procedural texture generator for Phaser.
+ * Creates all sprite + UI textures at runtime using Phaser Graphics
+ * so no image files are needed for visuals.
+ *
+ * Responsibilities:
+ * - Generate textures: dish, vignette, phage, helper, bacterium, injectRing,
+ *   injectFill, particle, shock, panel
+ *
+ * Notes:
+ * - Relies on W/H for canvas sizing
+ * - Uses geometry.randomPointInDish for starfield speckles in dish
+ */
+
+
 import { W, H } from "../config.js";
 import { randomPointInDish } from "./geometry.js";
 

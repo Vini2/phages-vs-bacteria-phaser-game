@@ -1,4 +1,31 @@
-// src/scenes/GameScene.js
+/**
+ * @file src/scenes/GameScene.js
+ * @author Vijini Mallawaarachchi <viji.mallawaarachchi@gmail.com>
+ * @version 0.0.1
+ * @description
+ * Main gameplay scene for Phagefall (phages vs bacteria).
+ *
+ * Core loop:
+ * - Player moves via WASD/arrow keys
+ * - Click/tap bacteria in range to attach and inject
+ * - Injection completes -> bacterium lyses -> score increases -> helpers spawn
+ * - Bacteria reproduce over time with ramping difficulty
+ * - Win by reaching neededToWin score, lose if bacteria exceed loseThreshold
+ *
+ * Responsibilities:
+ * - Build the dish, player, groups, UI, particles
+ * - Handle input + movement + injection logic
+ * - Spawn bacteria + helpers + manage difficulty ramp
+ * - Run tutorial overlay sequence
+ * - Display end screen with New Game button
+ *
+ * External dependencies:
+ * - systems/behaviors.js for bacteria + helper movement/AI
+ * - systems/geometry.js for dish point math
+ * - config.js for dimensions and balance constants
+ */
+
+
 import { W, H, GAME_SETTINGS } from "../config.js";
 import { bacteriaDrift, helperBrain } from "../systems/behaviors.js";
 import { randomPointInDish, clampToDishPoint } from "../systems/geometry.js";

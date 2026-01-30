@@ -1,3 +1,27 @@
+/**
+ * @file src/systems/behaviors.js
+ * @author Vijini Mallawaarachchi <viji.mallawaarachchi@gmail.com>
+ * @version 0.0.1
+ * @description
+ * Shared behavior/AI functions for entities in Phagefall.
+ * Kept separate from scenes so logic can be tested and tweaked cleanly.
+ *
+ * Exports:
+ * - bacteriaDrift(scene, bacterium, dt):
+ *   Applies jittery drift movement; slows motion when infected.
+ *
+ * - helperBrain(scene, helper, dt):
+ *   Helper phage AI:
+ *   - Seeks nearest non-infected bacterium
+ *   - Orbits when close
+ *   - Occasionally lyses if helper is marked "killer" and off cooldown
+ *
+ * Notes:
+ * - Functions expect Phaser Arcade Physics bodies on sprites.
+ * - Scene must provide bacteria group, lysis(), and killer tuning variables.
+ */
+
+
 export function bacteriaDrift(scene, b, dt) {
   const infected = b.getData("infected") === true;
   const max = infected ? 45 : 85;
